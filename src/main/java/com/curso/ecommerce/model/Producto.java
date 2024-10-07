@@ -99,14 +99,11 @@ public class Producto {
 		this.usuario = usuario;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen
-				+ ", precio=" + precio + ", cantidad=" + cantidad + ", usuario=" + usuario + "]";
+				+ ", precio=" + precio + ", cantidad=" + cantidad + "]";
 	}
-
-		
 	
 	
 }
