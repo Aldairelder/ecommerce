@@ -46,9 +46,9 @@
 						<p class="card-text" th:text="${producto.nombre}"></p>
 					</div>
 					<div class="card-footer">
-						<a href="productohome.html" class="btn btn-success">Ver
-							producto</a>
-					</div>
+				     <a th:href="@{/productohome/{id}  (id=${producto.id})  }" class="btn btn-success">Ver
+					 producto</a>
+				  </div>
 				</div>
 			</div>
 
