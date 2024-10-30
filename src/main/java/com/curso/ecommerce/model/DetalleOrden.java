@@ -59,9 +59,11 @@ public class DetalleOrden {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
-	public double getTotal() {
-		return total;
-	}
+	  // Método dinámico para calcular el total
+    public double getTotal() {
+        return this.precio * this.cantidad;
+    }
+    
 	public void setTotal(double total) {
 		this.total = total;
 	}
