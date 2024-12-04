@@ -8,14 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+
 import com.curso.ecommerce.model.Producto;
+import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.model.categoria;
 import com.curso.ecommerce.service.CategoriaService;
 import com.curso.ecommerce.service.ProductoService;
@@ -35,14 +34,21 @@ public class ProductoController {
     @Autowired
     private CategoriaService categoriaService;
 
+    // Verificar si el usuario está logueado antes de mostrar productos
     @GetMapping("")
-    public String show(Model model) {
+    public String show(Model model, HttpSession session) {
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir a login si no hay sesión
+        }
         model.addAttribute("productos", productoService.findAll());
         return "productos/show";
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model, HttpSession session) {
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir a login si no hay sesión
+        }
         model.addAttribute("categorias", categoriaService.findAll());
         return "productos/create";
     }
@@ -56,7 +62,18 @@ public class ProductoController {
                        @RequestParam("categoria_id") Integer categoriaId, 
                        @RequestParam("descuento") Double descuento,
                        @RequestParam("marca") String marca,
-                       @RequestParam("img") MultipartFile file) throws IOException {
+                       @RequestParam("img") MultipartFile file,
+                       HttpSession session) throws IOException {
+
+        // Verificar que el usuario esté logueado
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir si no está logueado
+        }
+
+        // Obtener el usuario logueado desde la sesión
+        Integer idUsuario = (Integer) session.getAttribute("idusuario");
+        Usuario usuario = new Usuario();
+        usuario.setId(idUsuario); // Asignar el id del usuario logueado
 
         Producto producto = new Producto();
         producto.setNombre(nombre);
@@ -65,14 +82,15 @@ public class ProductoController {
         producto.setPrecioCompra(precioCompra); 
         producto.setPrecioVenta(precioVenta);
 
-        // Obtener la categoría por ID
+        // Asignar la categoría al producto
         categoria categoria = categoriaService.findById(categoriaId);
-        producto.setCategoria(categoria); // Establecer la categoría
+        producto.setCategoria(categoria);
 
         producto.setDescuento(descuento);
         producto.setMarca(marca);
+        producto.setUsuario(usuario); // Asociar el usuario logueado al producto
 
-        // Lógica para manejar la imagen
+        // Manejar la imagen
         if (file != null && !file.isEmpty()) {
             String nombreImagen = upload.saveImage(file);
             producto.setImagen(nombreImagen);
@@ -83,7 +101,11 @@ public class ProductoController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
+    public String edit(@PathVariable Integer id, Model model, HttpSession session) {
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir a login si no hay sesión
+        }
+
         Optional<Producto> optionalProducto = productoService.get(id);
         if (optionalProducto.isPresent()) {
             Producto producto = optionalProducto.get();
@@ -97,16 +119,22 @@ public class ProductoController {
     }
 
     @PostMapping("/update")
-    public String update(Producto producto, @RequestParam("img") MultipartFile file, @RequestParam("categoria_id") Integer categoriaId) throws IOException {
+    public String update(Producto producto, @RequestParam("img") MultipartFile file, 
+                         @RequestParam("categoria_id") Integer categoriaId, HttpSession session) throws IOException {
+
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir si no está logueado
+        }
+
         Optional<Producto> optionalProducto = productoService.get(producto.getId());
         if (optionalProducto.isPresent()) {
             Producto p = optionalProducto.get();
-    
-            // Establecer la categoría seleccionada por el usuario
+
+            // Asignar la categoría seleccionada
             categoria categoria = categoriaService.findById(categoriaId);
             producto.setCategoria(categoria);
-    
-            // Manejar la imagen: si no hay nueva imagen, usar la existente
+
+            // Manejar la imagen
             if (file.isEmpty()) {
                 producto.setImagen(p.getImagen());
             } else {
@@ -117,19 +145,20 @@ public class ProductoController {
                 producto.setImagen(nombreImagen);
             }
 
-            // Ya no se maneja el usuario
+            // Mantener el usuario existente
+            producto.setUsuario(p.getUsuario());
 
-            // Actualizar el producto en la base de datos
             productoService.update(producto);
-        } else {
-            return "redirect:/productos"; 
         }
-    
         return "redirect:/productos";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id, HttpSession session) {
+        if (session.getAttribute("idusuario") == null) {
+            return "redirect:/auth/login"; // Redirigir si no está logueado
+        }
+
         Optional<Producto> optionalProducto = productoService.get(id);
         if (optionalProducto.isPresent()) {
             Producto p = optionalProducto.get();

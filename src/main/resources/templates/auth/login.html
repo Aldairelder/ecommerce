@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login - Spring eCommerce</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: top;
+            background-image: url('http://bit.ly/2gPLxZ4');
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .blurred-box {
+            position: relative;
+            width: 350px;
+            padding: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            background: inherit;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .blurred-box:after {
+            content: '';
+            width: 400px;
+            height: 400px;
+            background: inherit;
+            position: absolute;
+            top: -25px;
+            left: -25px;
+            box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.1);
+            filter: blur(10px);
+        }
+
+        .card-body {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 15px auto;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            color: white;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            background-color: rgba(220, 53, 69, 0.8);
+            color: white;
+            border: none;
+        }
+
+        a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="blurred-box">
+        <div class="card-body">
+            <!-- Ícono de usuario genérico -->
+            <div class="user-icon">A</div>
+            <h3>Iniciar sesión</h3>
+            <form th:action="@{/auth/login}" method="post">
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" required>
+                </div>
+                <!-- Mensaje de error -->
+                <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+                    <p th:text="${error}"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">Iniciar sesión</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

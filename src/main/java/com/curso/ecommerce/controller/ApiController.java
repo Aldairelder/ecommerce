@@ -1,13 +1,8 @@
 package com.curso.ecommerce.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.categoria;
-import com.curso.ecommerce.model.DetalleOrden;
-import com.curso.ecommerce.model.Orden;
 import com.curso.ecommerce.service.CategoriaService;
 import com.curso.ecommerce.service.ProductoService;
 import com.curso.ecommerce.service.UploadFileService;
 
 @RestController
-@RequestMapping("/api/productos")  // Prefijo para todos los endpoints en este controlador
+@RequestMapping("/api/productos")  // Prefijo para todos los endpoints de productos
 public class ApiController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
 
     @Autowired
     private ProductoService productoService;
@@ -37,13 +28,9 @@ public class ApiController {
     @Autowired
     private CategoriaService categoriaService;
 
-    // Listado de productos en el carrito
-    private List<DetalleOrden> detalles = new ArrayList<>();
-    private Orden orden = new Orden();
-
     // Obtener todos los productos
     @GetMapping
-    public List<Producto> getAllProductos() {
+    public Iterable<Producto> getAllProductos() {
         return productoService.findAll();
     }
 
@@ -64,10 +51,9 @@ public class ApiController {
         producto.setNombre(nombre);
         producto.setDescripcion(descripcion);
         producto.setCantidad(cantidad);
-        producto.setPrecioCompra(precioCompra); 
+        producto.setPrecioCompra(precioCompra);
         producto.setPrecioVenta(precioVenta);
 
-        // Obtener la categoría por ID
         categoria categoria = categoriaService.findById(categoriaId);
         producto.setCategoria(categoria);
         producto.setDescuento(descuento);
@@ -132,60 +118,5 @@ public class ApiController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    // --- Endpoints para el carrito ---
-
-    // Añadir un producto al carrito
-    @PostMapping("/cart/add")
-    public ResponseEntity<Orden> addCart(@RequestParam Integer id, @RequestParam Integer cantidad) {
-        Optional<Producto> optionalProducto = productoService.get(id);
-        if (optionalProducto.isPresent()) {
-            Producto producto = optionalProducto.get();
-            DetalleOrden detalleOrden = new DetalleOrden();
-            detalleOrden.setCantidad(cantidad);
-            detalleOrden.setNombre(producto.getNombre());
-            detalleOrden.setProducto(producto);
-
-            // Añadir el detalle al carrito
-            detalles.add(detalleOrden);
-
-            // Calcular el total de la orden
-            double sumaTotal = detalles.stream().mapToDouble(DetalleOrden::getTotal).sum();
-            orden.setTotal(sumaTotal);
-
-            return new ResponseEntity<>(orden, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    // Eliminar un producto del carrito
-    @DeleteMapping("/cart/remove/{id}")
-    public ResponseEntity<Orden> removeCart(@PathVariable Integer id) {
-        // Filtrar los detalles para eliminar el producto con el id dado
-        detalles = detalles.stream()
-                .filter(detalleOrden -> detalleOrden.getProducto().getId() != id)
-                .collect(Collectors.toList());
-
-        // Recalcular el total de la orden
-        double sumaTotal = detalles.stream().mapToDouble(DetalleOrden::getTotal).sum();
-        orden.setTotal(sumaTotal);
-
-        return new ResponseEntity<>(orden, HttpStatus.OK);
-    }
-
-    // Ver el carrito
-    @GetMapping("/cart/view")
-    public ResponseEntity<Orden> viewCart() {
-        return new ResponseEntity<>(orden, HttpStatus.OK);
-    }
-
-    // Vaciar el carrito
-    @DeleteMapping("/cart/clear")
-    public ResponseEntity<Void> clearCart() {
-        detalles.clear();
-        orden.setTotal(0.0);
-        return ResponseEntity.noContent().build();
     }
 }

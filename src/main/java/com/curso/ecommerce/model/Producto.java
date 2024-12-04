@@ -42,6 +42,11 @@ public class Producto {
     @Column(name = "updated_at", insertable = false)
     private Date updatedAt;        // Fecha de actualización
 
+    // Nueva relación con la entidad Usuario
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     // Constructor vacío
     public Producto() {
     }
@@ -49,7 +54,7 @@ public class Producto {
     // Constructor con parámetros
     public Producto(Integer id, String nombre, String descripcion, String imagen, double precioCompra,
                     double precioVenta, categoria categoria, int cantidad, double descuento, String marca,
-                    Date createdAt, Date updatedAt) {
+                    Date createdAt, Date updatedAt, Usuario usuario) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -62,6 +67,7 @@ public class Producto {
         this.marca = marca;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.usuario = usuario;
     }
 
     // Getters y Setters
@@ -161,11 +167,19 @@ public class Producto {
         this.updatedAt = updatedAt;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
         return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen
                 + ", precioCompra=" + precioCompra + ", precioVenta=" + precioVenta + ", categoria=" + categoria
                 + ", cantidad=" + cantidad + ", descuento=" + descuento + ", marca=" + marca + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt + "]";
+                + ", updatedAt=" + updatedAt + ", usuario=" + usuario + "]";
     }
 }
