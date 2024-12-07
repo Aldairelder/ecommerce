@@ -16,6 +16,7 @@
             background-size: cover;
             background-position: top;
             background-image: url('http://bit.ly/2gPLxZ4');
+           
             font-family: Arial, Helvetica, sans-serif;
             display: flex;
             justify-content: center;
@@ -54,7 +55,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background-color: #007bff;
+            
             color: white;
             display: flex;
             align-items: center;
@@ -62,6 +63,14 @@
             font-size: 40px;
             margin: 0 auto 15px auto;
             text-transform: uppercase;
+            overflow: hidden; /* Asegura que la imagen se ajuste dentro del círculo */
+        }
+
+        /* Asegurar que la imagen dentro del user-icon se ajuste bien */
+        .user-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mantener la proporción de la imagen */
         }
 
         h3 {
@@ -113,8 +122,11 @@
 <body>
     <div class="blurred-box">
         <div class="card-body">
-            <!-- Ícono de usuario genérico -->
-            <div class="user-icon">A</div>
+            <!-- Reemplazar el icono con la imagen en un círculo -->
+            <div class="user-icon">
+                <img src="/images/logo.png" alt="Mi imagen">
+            </div>
+
             <h3>Iniciar sesión</h3>
             <form th:action="@{/auth/login}" method="post">
                 <div class="form-group">

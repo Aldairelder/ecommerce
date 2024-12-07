@@ -25,7 +25,9 @@
 
   <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">
-    Spring eCommerce <small>Productos</small>
+    <img src="/images/logo.png" alt="Mi imagen" style="max-height: 50px; width: auto;">
+    J & J Service Engineers <small>Productos</small>
+    
   </h1>
 
   <ol class="breadcrumb">
@@ -48,6 +50,7 @@
         <th scope="col">Descuento</th>
         <th scope="col">Marca</th>
         <th scope="col">Categoría</th>
+        <th scope="col">Imagen</th>
         <th scope="col">Acción</th>
         
       </tr>
@@ -62,6 +65,12 @@
         <td th:text="${producto.descuento} + ' %'"></td> <!-- Muestra el descuento con el símbolo % -->
         <td th:text="${producto.Marca}"></td> <!-- Muestra el descuento con el símbolo % -->
         <td th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}"></td>
+        <td>
+          <img th:src="|http://localhost:8080/images/${producto.imagen}|" 
+               alt="Imagen del producto" 
+               style="max-height: 50px; width: auto;">
+        </td>
+        
         <td>
           <a class="btn btn-warning" th:href="@{productos/edit/{id}(id=${producto.id})}">Editar</a>
         </td>

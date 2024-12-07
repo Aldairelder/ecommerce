@@ -1,77 +1,91 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- Navigation -->
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <img src="/images/logo.png" alt="Mi imagen" style="max-height: 50px; width: auto;">
+            <a class="navbar-brand" th:href="@{/}" style="color: #161717;">J & J Service Engineers</a>
 
-<head>
+            <!-- Formulario de búsqueda que es responsivo -->
+            <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/search}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="nombre" autocomplete="off" style="color: #161717;">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: #161717;">Buscar</button>
+            </form>
 
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+            <!-- Botón de menú para móviles -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<title>Spring eCommerce</title>
+            <!-- Menú de navegación en dispositivos grandes y móviles -->
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/cart}" style="color: #161717;">Carrito</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/usuario/login}" style="color: #161717;">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Estilos personalizados para el header -->
+    <style>
+        .navbar {
+            background-color: #f6f7f8 !important; /* Fondo claro para la barra */
+        }
 
-<!-- Bootstrap core CSS -->
-<link th:href="@{vendor/bootstrap/css/bootstrap.min.css}"
-	rel="stylesheet">
+        .navbar-brand {
+            color: #161717 !important; /* Color oscuro para el nombre de la marca */
+        }
 
-<!-- Custom styles for this template -->
-<link th:href="@{css/heroic-features.css}" rel="stylesheet">
+        .navbar-brand:hover {
+            color: #161717 !important; /* Cambiar el color al pasar el ratón */
+        }
 
-</head>
+        .navbar-nav .nav-link {
+            color: #161717 !important; /* Color oscuro para los enlaces */
+        }
 
-<body>
+        .navbar-nav .nav-link:hover {
+            color: #28a745 !important; /* Cambiar el color al pasar el ratón */
+        }
 
-	<!-- Navigation -->
-	<div th:fragment="header">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-			<div class="container">
-				<a class="navbar-brand" th:href="@{/}">Spring eCommerce</a>
+        .navbar-toggler-icon {
+            background-color: #28a745 !important; /* Icono del toggle en verde */
+        }
 
-				<form class="form-inline my-2 my-lg-0" method="post" th:action="@{/search}">
-					<input class="form-control mr-sm-2" type="search"
-						placeholder="Buscar" aria-label="Search" name="nombre"
-						autocomplete="off">
-					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-				</form>
+        /* Mejorar la visibilidad del formulario de búsqueda en móviles */
+        @media (max-width: 576px) {
+            .form-inline {
+                width: 100%;
+                margin-top: 10px;
+            }
+            .navbar-nav {
+                text-align: center;
+            }
+            .navbar-nav .nav-link {
+                padding: 10px 15px;
+            }
+        }
+        
+        /* Adaptar la navbar en pantallas grandes */
+        @media (min-width: 577px) {
+            .navbar-nav {
+                display: flex;
+                justify-content: flex-end;
+            }
+            .form-inline {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    </style>
+</div>
 
-
-				<button class="navbar-toggler" type="button" data-toggle="collapse"
-					data-target="#navbarResponsive" aria-controls="navbarResponsive"
-					aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarResponsive">
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item"><a class="nav-link" th:href="@{/getCart}">Carrito</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{/usuario/login}">Login</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-
-	</div>
-	
-	
-	
-
-	<!-- Footer -->
-	<div th:fragment="footer">
-		<footer class="py-5 bg-dark">
-			<div class="container">
-				<p class="m-0 text-center text-white">Copyright &copy; Spring
-					eCommerce 2024</p>
-			</div>
-			<!-- /.container -->
-		</footer>
-
-	</div>
-
-	<!-- Bootstrap core JavaScript -->
-	<script th:src="@{vendor/jquery/jquery.min.js}"></script>
-	<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-</body>
-
-</html>
+<!-- Footer -->
+<div th:fragment="footer">
+    <footer class="py-5 bg-white">
+        <div class="container">
+            <p class="m-0 text-center" style="color: #161717;">Copyright &copy; J & J Service Engineers</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+</div>
