@@ -62,8 +62,8 @@
         <td th:text="${producto.cantidad}"></td>
         <td th:text="${producto.precioCompra}"></td>
         <td th:text="${producto.precioVenta}"></td>
-        <td th:text="${producto.descuento} + ' %'"></td> <!-- Muestra el descuento con el símbolo % -->
-        <td th:text="${producto.Marca}"></td> <!-- Muestra el descuento con el símbolo % -->
+        <td th:text="${producto.descuento} + ' %'"></td> 
+        <td th:text="${producto.Marca}"></td> 
         <td th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}"></td>
         <td>
           <img th:src="|http://localhost:8080/images/${producto.imagen}|" 
